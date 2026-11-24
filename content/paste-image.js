@@ -5,8 +5,7 @@
   const DIRECT = ["image/png", "image/jpeg", "image/gif"]; // 당근 file input accept 와 동일
 
   function extractImages(e) {
-    const dt = e.clipboardData;
-    if (!dt) return [];
+    const dt = e.clipboardData; // 호출부(paste 리스너)가 이미 dt 를 가드한다.
     const out = [];
     if (dt.files && dt.files.length) {
       for (const f of dt.files) if (f.type.startsWith("image/")) out.push(f);

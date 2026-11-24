@@ -1,7 +1,7 @@
 // 당근톡 팝업: 채팅 주소를 저장하고 팝업 창 열기를 요청한다.
 const PREFIX = "https://chat.daangn.com/";
+const form = document.getElementById("form");
 const urlInput = document.getElementById("url");
-const openBtn = document.getElementById("open");
 const msg = document.getElementById("msg");
 
 chrome.storage.local.get("chatUrl").then(({ chatUrl }) => {
@@ -14,7 +14,9 @@ function save() {
 
 urlInput.addEventListener("change", save);
 
-openBtn.addEventListener("click", async () => {
+// 버튼 클릭과 입력창 Enter(form submit) 둘 다로 창을 연다.
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
   const url = urlInput.value.trim();
   if (!url.startsWith(PREFIX)) {
     msg.textContent = "chat.daangn.com 주소만 열 수 있어요.";

@@ -8,9 +8,8 @@
    매치가 없으면 자동 no-op, SPA 리렌더에도 유지. (:has() → manifest minimum_chrome_version 105) */
 html.kkt-popup header:has(+ main.body) { display: none !important; }
 
-/* 변수 기본값 = 라이트(테마 클래스가 아직 없을 때도 이 값) */
-body.kkt-kakao,
-body.kkt-kakao.kkt-theme-light {
+/* 변수 기본값 = 라이트. 테마 클래스가 없을 때도, .kkt-theme-light 일 때도 이 규칙이 매치한다. */
+body.kkt-kakao {
   --kkt-bg: #b2c7da;
   --kkt-mine-bg: #fef01b;
   --kkt-mine-fg: #1a1a1a;

@@ -31,10 +31,10 @@
 | 입력창 | `textarea` |
 
 ## 내 메시지 vs 상대 메시지 구분 (★ 테마 스킨 핵심)
-- `.message-wrapper` 의 **부모**가 정렬을 결정:
-  - 상대: 부모 `.sequnce-message`(+emotion hash) → `getComputedStyle(parent).justifyContent === "start"`
-  - 나: 부모 `.for-containment`(+emotion hash) → `justifyContent === "flex-end"`
-- **해시에 의존하지 말고 `justify-content` computed 값 또는 `.for-containment` 클래스로 구분**하면 배포 변경에 강함.
+- `.message-wrapper` 의 **부모 `.for-containment`** 가 정렬을 결정(아래 선조사 #3 전수 재확인 기준):
+  - 상대: 부모 `.for-containment.left` → `justifyContent === "start"`
+  - 나: 부모 `.for-containment:not(.left)`(bare 연속분 포함) → `justifyContent === "flex-end"`
+- **해시에 의존하지 말고 `.for-containment`/`.left` 클래스 또는 `justify-content` computed 값으로 구분**하면 배포 변경에 강함.
 - 상대 메시지는 시퀀스 첫 줄에만 `.nickname` 과 프로필이 붙고, 이어지는 메시지는 생략됨.
 
 ## 메시지 말풍선 내부 구조(예)

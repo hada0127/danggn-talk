@@ -4,7 +4,7 @@
 
   // 입력·버튼·링크·이미지·말풍선·모달/팝업 루트·설정 패널 위 더블클릭은 토글하지 않는다.
   const SKIP = "textarea, input, button, a, select, img, [role='button']," +
-    " .message-box, .message-wrapper, #kkt-settings, #modalRoot, #popupRoot";
+    " .message-box, .message-wrapper, .message-date, #kkt-settings, #modalRoot, #popupRoot";
 
   function isInteractive(t) {
     if (!t || !t.closest) return true;

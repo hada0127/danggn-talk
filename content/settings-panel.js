@@ -25,7 +25,6 @@
   }
 
   function build() {
-    if (document.getElementById("kkt-settings")) return;
     injectStyle();
 
     const root = document.createElement("div");

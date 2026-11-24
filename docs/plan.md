@@ -16,10 +16,10 @@
 3. **더블클릭 토글** = 빈 배경/헤더영역 더블클릭 시 `body.kkt-kakao` 토글, `chrome.storage.local.kakaoMode` 저장. textarea/input/button/a/말풍선 내부 더블클릭은 무시.
 4. **테마 CSS** = `themes/kakao.css` 항상 주입, 스킨 규칙은 `body.kkt-kakao` 게이트(예외: 팝업 헤더 숨김 `html.kkt-popup header:has(+ main.body)`). 테마별 색은 CSS 변수(`body.kkt-theme-light|dark|excel` 가 `--kkt-*` 변수만 교체). 말풍선 나/상대 = `.for-containment:not(.left)`(나, bare 연속분 포함)/`.for-containment.left`(상대) 기준.
 5. **이미지 붙여넣기** = paste 이벤트 가로채 image blob → `.option-wrapper input[type=file]`(accept png/jpeg/gif, multiple)에 DataTransfer 로 주입 + change dispatch. webp 는 png 변환 또는 제외. clipboardRead 권한 불필요(native paste).
-6. **스크롤 키퍼** = 스크롤 컨테이너(`.message-wrapper` 조상 중 첫 overflow-y:auto+스크롤되는 것)에 MutationObserver. flex-direction:row 라 바닥 append 시 네이티브가 위치를 유지하므로 scrollTop 보정은 안 한다. scroll 이벤트로 `lastTop`·`wasAtBottom` 저장, 변이 시 바닥이었으면 no-op, 아니면 당근이 강제 스크롤했을 때만 `scrollTop=lastTop` 복원. 컨테이너가 끊기면(방 전환/지연 로드) 재탐색·재부착(1초 폴링, 포기 없음).
+6. **스크롤 키퍼** = 스크롤 컨테이너(`.message-wrapper` 조상 중 첫 overflow-y:auto+스크롤되는 것)에 MutationObserver. flex-direction:row 라 바닥 append 시 네이티브가 위치를 유지하므로 scrollTop 보정은 안 한다. scroll 이벤트로 `lastTop`·`wasAtBottom` 저장, 변이 시 바닥이었으면 no-op, 아니면 당근이 바닥으로 끌고 내려갔을 때만 `scrollTop=lastTop` 복원하되 마지막이 내 메시지면(내 전송) 복원하지 않고 바닥을 보여준다. 방 전환은 pathname 리셋으로 처리. 컨테이너가 끊기면(방 전환/지연 로드) 재탐색·재부착(1초 폴링, 포기 없음).
 
 ## 파일 구성 (MV3)
-- `manifest.json` — MV3, minimum_chrome_version:"105"(:has() 요건), permissions:["storage"](host_permissions 불필요 — 선언형 content_scripts matches 로 충분, windows.create·fetch·tabs 미사용), action.default_popup, background.service_worker, content_scripts(js 순서: selectors→theme→popup-layout→settings-panel→double-click→scroll-keeper→paste-image, css:[themes/kakao.css], run_at:document_idle)
+- `manifest.json` — MV3, minimum_chrome_version:"105"(:has() 요건), permissions:["storage"](host_permissions 불필요 — 선언형 content_scripts matches 로 충분, windows 는 권한 불필요, fetch·tabs 미사용), action.default_popup, background.service_worker, content_scripts(js 순서: selectors→theme→popup-layout→settings-panel→double-click→scroll-keeper→paste-image, css:[themes/kakao.css], run_at:document_idle)
 - `action/popup.html`, `action/popup.js` — 주소 입력·저장·"창 열기"
 - `background/service_worker.js` — OPEN_CHAT_WINDOW 처리(windows.create, 실패 시 {ok:false}), IS_PLUS_POPUP 판정(sender 탭의 창을 windows.get 해 `type==='popup'` 확인 — 창 id 저장 불필요)
 - `content/selectors.js` — 시맨틱 셀렉터 상수 + 안전조회 헬퍼(실패해도 당근 기본 무손상)

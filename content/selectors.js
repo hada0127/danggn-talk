@@ -5,6 +5,7 @@
 
   K.sel = {
     messageWrapper: ".message-wrapper",
+    containment: ".for-containment",
     fileInput: ".option-wrapper input[type=file]"
   };
 
