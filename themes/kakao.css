@@ -1,0 +1,76 @@
+/* 당근톡 카카오톡풍 스킨.
+   스킨 규칙은 전부 body.kkt-kakao 로 게이트(스킨 끄면 당근 기본 유지).
+   색은 전부 --kkt-* 변수로만 바꾸고, 규칙 본문은 변수를 참조하는 한 벌이다.
+   예외: 바로 아래 '팝업 헤더 숨김' 규칙만 body.kkt-kakao 가 아니라 html.kkt-popup 게이트다
+   (카톡 스킨 on/off 와 무관하게 팝업 창에선 항상 전역 헤더를 숨긴다). */
+
+/* 팝업 헤더 숨김 — body.kkt-kakao 게이트 예외. main.body 바로 앞의 전역 헤더만 숨긴다.
+   매치가 없으면 자동 no-op, SPA 리렌더에도 유지. (:has() → manifest minimum_chrome_version 105) */
+html.kkt-popup header:has(+ main.body) { display: none !important; }
+
+/* 변수 기본값 = 라이트(테마 클래스가 아직 없을 때도 이 값) */
+body.kkt-kakao,
+body.kkt-kakao.kkt-theme-light {
+  --kkt-bg: #b2c7da;
+  --kkt-mine-bg: #fef01b;
+  --kkt-mine-fg: #1a1a1a;
+  --kkt-other-bg: #ffffff;
+  --kkt-other-fg: #1a1a1a;
+  --kkt-fg: #1a1a1a;
+}
+
+/* 다크 */
+body.kkt-kakao.kkt-theme-dark {
+  --kkt-bg: #1e1e24;
+  --kkt-mine-bg: #ffe14d;
+  --kkt-mine-fg: #1a1a1a;
+  --kkt-other-bg: #3b3b44;
+  --kkt-other-fg: #f2f2f2;
+  --kkt-fg: #f2f2f2;
+}
+
+/* 엑셀(스프레드시트 느낌: 연한 배경 + 격자). --kkt-grid 는 엑셀에서만 쓴다. */
+body.kkt-kakao.kkt-theme-excel {
+  --kkt-bg: #e9f0e4;
+  --kkt-mine-bg: #d9ead3;
+  --kkt-mine-fg: #16321a;
+  --kkt-other-bg: #ffffff;
+  --kkt-other-fg: #1a1a1a;
+  --kkt-fg: #16321a;
+  --kkt-grid: #c3d3b5;
+}
+
+/* 채팅 컬럼 배경(MAIN.body 의 마지막 자식 = 채팅 영역) */
+body.kkt-kakao main.body > div:last-child {
+  background: var(--kkt-bg) !important;
+}
+
+/* 엑셀 테마 격자 */
+body.kkt-kakao.kkt-theme-excel main.body > div:last-child {
+  background:
+    linear-gradient(var(--kkt-grid) 1px, transparent 1px) 0 0 / 100% 28px,
+    linear-gradient(90deg, var(--kkt-grid) 1px, transparent 1px) 0 0 / 56px 100%,
+    var(--kkt-bg) !important;
+}
+
+/* 말풍선 공통 */
+body.kkt-kakao p.message-box {
+  border-radius: 14px !important;
+  padding: 8px 11px !important;
+}
+
+/* 나(.for-containment:not(.left) — bare 연속 메시지 포함) / 상대(.for-containment.left) */
+body.kkt-kakao .for-containment:not(.left) p.message-box {
+  background: var(--kkt-mine-bg) !important;
+  color: var(--kkt-mine-fg) !important;
+}
+body.kkt-kakao .for-containment.left p.message-box {
+  background: var(--kkt-other-bg) !important;
+  color: var(--kkt-other-fg) !important;
+}
+
+/* 말풍선 밖 텍스트(닉네임·날짜 구분선) 색 — 다크/엑셀 배경에서 묻히지 않게 */
+body.kkt-kakao .message-wrapper > .nickname,
+body.kkt-kakao .message-date {
+  color: var(--kkt-fg) !important;
+}

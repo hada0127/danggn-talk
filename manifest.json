@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "당근톡",
+  "version": "1.0.0",
+  "description": "당근 채팅을 메뉴바 없는 작은 팝업 창과 카카오톡풍 스킨으로 쓰는 비공식 도우미입니다. 당근마켓 공식 확장이 아닙니다.",
+  "minimum_chrome_version": "105",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "action/popup.html",
+    "default_title": "당근톡",
+    "default_icon": {
+      "16": "icons/16.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "background": {
+    "service_worker": "background/service_worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chat.daangn.com/*"],
+      "js": [
+        "content/selectors.js",
+        "content/theme.js",
+        "content/popup-layout.js",
+        "content/settings-panel.js",
+        "content/double-click-toggle.js",
+        "content/scroll-keeper.js",
+        "content/paste-image.js"
+      ],
+      "css": ["themes/kakao.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
