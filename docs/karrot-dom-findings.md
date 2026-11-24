@@ -17,6 +17,17 @@
   - `#popupRoot`, `#modalRoot` 별도 루트 존재.
 - `css-xxxxxx` 는 emotion(CSS-in-JS) 해시 → **배포마다 바뀜. 셀렉터로 쓰면 안 됨.** 시맨틱 클래스/구조로 타겟할 것.
 
+## 방 제목 줄(제목 바) — 제목 줄 컨트롤 설계 근거 (2026-11-25)
+- 채팅 헤더 줄 = `div:has(> .group-title)`. 안에 `.group-title`(방 이름, 왼쪽)과 우측 컨테이너의 `.more-button-wrapper`(⋮ 더보기 메뉴)가 있다.
+- 팝업(html.kkt-popup)에선 조상에 padding-top:64px 가 있어(숨긴 전역 헤더 자리) 제목 줄이 상단 ~64px, 높이 ~64px 로 앉는다.
+- 제목 줄 컨트롤은 `.group-title` rect 로 세로 중앙을 계산해 ‹(왼쪽)·⚙(⋮ 왼쪽)을 fixed 로 올린다. `.group-title` 없으면 숨김(no-op). 제목 줄 왼쪽은 kakao.css 가 padding-left:48px 로 ‹ 자리를 비운다.
+
+## 팝업 2컬럼(목록/채팅) — 목록 전용 보기 설계 근거 (2026-11-25)
+- `main.body`(flex row) 직속 자식: [래퍼 div, PC알림 배너 div(마지막)]. 래퍼 div 안에 [스페이서, 목록 컬럼, 채팅 컬럼].
+- 채팅 컬럼 = `section:has(.chat-normal-room)`, 래퍼 = `main.body > div:has(.chat-normal-room)`(당근이 812px 상·하한+margin:auto 중앙정렬, 배포 CSS 가 flex/min-width:0/margin:0 로 해제).
+- 목록 컬럼 = `main.body div:has(a[href*="/room/"]):has(~ * .chat-normal-room)`(채팅 컬럼보다 앞 형제, ~384px 고정, 방 링크 `a[href*="/room/"]` 보유). 기본 팝업에선 숨김(B3), 목록 전용 보기(html.kkt-list)에선 되살려 꽉 채우고 채팅 컬럼을 숨긴다.
+- 말풍선 = `p.message-box`(자체 max-width ~484px 라 안 늘어남) → 글씨 크기 설정 대상.
+
 ## 안정적으로 보이는 시맨틱 셀렉터
 | 용도 | 셀렉터 |
 |---|---|

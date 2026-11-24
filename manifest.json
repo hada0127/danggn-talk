@@ -4,9 +4,8 @@
   "version": "1.0.0",
   "description": "당근 채팅을 메뉴바 없는 작은 팝업 창과 카카오톡풍 스킨으로 쓰는 비공식 도우미입니다. 당근마켓 공식 확장이 아닙니다.",
   "minimum_chrome_version": "105",
-  "permissions": ["storage"],
+  "permissions": ["storage", "activeTab"],
   "action": {
-    "default_popup": "action/popup.html",
     "default_title": "danggn-talk",
     "default_icon": {
       "16": "icons/16.png",
@@ -28,8 +27,10 @@
       "js": [
         "content/selectors.js",
         "content/theme.js",
+        "content/appearance.js",
         "content/popup-layout.js",
         "content/settings-panel.js",
+        "content/popup-controls.js",
         "content/double-click-toggle.js",
         "content/scroll-keeper.js",
         "content/paste-image.js"

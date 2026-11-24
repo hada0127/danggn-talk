@@ -34,6 +34,22 @@ html.kkt-popup main.body .chat-normal-room {
   margin: 0 !important;
 }
 
+/* 방 제목 줄 왼쪽에 ‹ 뒤로 버튼 자리를 비운다(제목이 버튼 위로 겹치지 않게). popup-controls.js 가
+   ‹ 를 row 왼쪽 8px, 폭 32px 로 두므로 48px 패딩이면 8px 여백으로 제목이 버튼 오른쪽에서 시작한다.
+   헤더 줄 = .group-title 을 직속 자식으로 가진 div. 매치 없으면 자동 no-op. */
+html.kkt-popup div:has(> .group-title) { padding-left: 48px !important; }
+
+/* 목록 전용 보기(‹ 버튼으로 html.kkt-list 토글): 위 B3 의 목록 숨김을 되돌려 목록 컬럼을 꽉 채우고
+   채팅 컬럼을 숨긴다. .kkt-list 가 추가돼 B3·채팅폭 규칙보다 명시도가 높다. */
+html.kkt-popup.kkt-list main.body div:has(a[href*="/room/"]):has(~ * .chat-normal-room) {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+html.kkt-popup.kkt-list main.body section:has(.chat-normal-room) { display: none !important; }
+
 /* 변수 기본값 = 라이트. 테마 클래스가 없을 때도, .kkt-theme-light 일 때도 이 규칙이 매치한다. */
 body.kkt-kakao {
   --kkt-bg: #b2c7da;
