@@ -1,4 +1,4 @@
-// 당근톡 팝업: 채팅 주소를 저장하고 팝업 창 열기를 요청한다.
+// danggn-talk 팝업: 채팅 주소를 저장하고 팝업 창 열기를 요청한다.
 const PREFIX = "https://chat.daangn.com/";
 const form = document.getElementById("form");
 const urlInput = document.getElementById("url");

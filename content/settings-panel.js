@@ -1,4 +1,4 @@
-// 당근톡 설정 패널: 팝업 창에 테마 선택 + 카톡 스킨 토글 UI 를 주입한다.
+// danggn-talk 설정 패널: 팝업 창에 테마 선택 + 카톡 스킨 토글 UI 를 주입한다.
 (() => {
   const K = (window.__kkt = window.__kkt || {});
 
@@ -30,7 +30,7 @@
     const root = document.createElement("div");
     root.id = "kkt-settings";
     root.innerHTML = `
-      <button id="kkt-settings-btn" type="button" title="당근톡 설정">⚙</button>
+      <button id="kkt-settings-btn" type="button" title="danggn-talk 설정">⚙</button>
       <div id="kkt-settings-panel" hidden>
         <label><input type="checkbox" id="kkt-kakao-toggle"> 카톡 스킨</label>
         <fieldset>

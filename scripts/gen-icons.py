@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# 당근톡 아이콘 생성(의존성 없음): 당근색 둥근 사각 + 흰 말풍선 + 점 3개를 그려
+# danggn-talk 아이콘 생성(의존성 없음): 당근색 둥근 사각 + 흰 말풍선 + 점 3개를 그려
 # 16/48/128 RGBA PNG 로 직접 인코딩한다. PIL/ImageMagick 불필요.
 import os
 import struct

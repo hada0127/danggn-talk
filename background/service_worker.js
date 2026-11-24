@@ -1,4 +1,4 @@
-// 당근톡 background: 채팅 팝업 창을 열고, 어느 창이 팝업인지 식별한다.
+// danggn-talk background: 채팅 팝업 창을 열고, 어느 창이 팝업인지 식별한다.
 const URL_PREFIX = "https://chat.daangn.com/";
 
 async function openChatWindow() {
@@ -17,7 +17,7 @@ async function openChatWindow() {
   }
 }
 
-// 요청을 보낸 탭이 type:"popup" 창에 있으면 당근톡 팝업으로 본다(별도 id 저장 불필요).
+// 요청을 보낸 탭이 type:"popup" 창에 있으면 danggn-talk 팝업으로 본다(별도 id 저장 불필요).
 async function isPlusPopup(sender) {
   if (!sender.tab) return false;
   const w = await chrome.windows.get(sender.tab.windowId).catch(() => null);

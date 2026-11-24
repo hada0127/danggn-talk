@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "당근톡",
+  "name": "danggn-talk",
   "version": "1.0.0",
   "description": "당근 채팅을 메뉴바 없는 작은 팝업 창과 카카오톡풍 스킨으로 쓰는 비공식 도우미입니다. 당근마켓 공식 확장이 아닙니다.",
   "minimum_chrome_version": "105",
   "permissions": ["storage"],
   "action": {
     "default_popup": "action/popup.html",
-    "default_title": "당근톡",
+    "default_title": "danggn-talk",
     "default_icon": {
       "16": "icons/16.png",
       "48": "icons/48.png",

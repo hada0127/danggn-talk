@@ -1,4 +1,4 @@
-// 당근톡 DOM 접근 계층: 시맨틱 셀렉터 상수 + 안전 조회 + 요소 탐색 + 팝업 모드 질의.
+// danggn-talk DOM 접근 계층: 시맨틱 셀렉터 상수 + 안전 조회 + 요소 탐색 + 팝업 모드 질의.
 // emotion css-xxxxxx 해시 클래스는 쓰지 않는다(배포마다 바뀜).
 (() => {
   const K = (window.__kkt = window.__kkt || {});
@@ -31,7 +31,7 @@
   // 업로드용 파일 input: .option-wrapper 안의 것. 못 찾으면 null(붙여넣기는 당근 기본 동작 유지).
   K.findFileInput = () => K.q(K.sel.fileInput);
 
-  // 이 탭이 당근톡 팝업 창인지 background 에 1회 질의하고 결과를 메모이즈한다.
+  // 이 탭이 danggn-talk 팝업 창인지 background 에 1회 질의하고 결과를 메모이즈한다.
   let popupPromise;
   K.popup = () =>
     popupPromise ||
