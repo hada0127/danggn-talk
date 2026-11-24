@@ -81,6 +81,29 @@ body.kkt-kakao.kkt-theme-excel {
   --kkt-grid: #c3d3b5;
 }
 
+/* 클로드(claude.ai): 웜 페이퍼 배경 + 받은 말풍선 흰 카드 + 보낸 말풍선 웜 그레이.
+   claude.ai 실측(흰 배경 + 사용자 말풍선 5% 블랙 ≈ #f2f2f2)을 Claude 아이덴티티인
+   웜 톤으로 보정. 코럴 액센트는 과해져 쓰지 않고, 색만 따뜻하게 잡았다. */
+body.kkt-kakao.kkt-theme-claude {
+  --kkt-bg: #f5f4ee;
+  --kkt-mine-bg: #e9e6dd;
+  --kkt-mine-fg: #1f1e1c;
+  --kkt-other-bg: #ffffff;
+  --kkt-other-fg: #1f1e1c;
+  --kkt-fg: #73726c;
+}
+
+/* ChatGPT(chatgpt.com 실측): 거의 흰 배경 + 보낸 말풍선 검정/흰 글씨 + 받은(어시스턴트)은
+   당근 특성상 말풍선이 필요해 ChatGPT 서피스 그레이(#f4f4f4)로 은은하게 잡았다. */
+body.kkt-kakao.kkt-theme-chatgpt {
+  --kkt-bg: #fcfcfc;
+  --kkt-mine-bg: #000000;
+  --kkt-mine-fg: #ffffff;
+  --kkt-other-bg: #f4f4f4;
+  --kkt-other-fg: #0d0d0d;
+  --kkt-fg: #6e6e80;
+}
+
 /* 채팅 배경(메시지 스크롤 컨테이너 = .for-containment 행을 직속 자식으로 가진 영역).
    :not(.for-containment) 로 스크롤 컨테이너만 잡는다 — 중첩 .for-containment 를 가진
    메시지 행까지 매치해 엑셀 격자가 그 행에서 어긋나는 것을 막는다. */

@@ -1,7 +1,7 @@
 // danggn-talk 테마: storage 의 kakaoMode/theme 를 body 클래스로 반영한다(팝업 창에서만).
 (() => {
   const K = (window.__kkt = window.__kkt || {});
-  const THEMES = ["light", "dark", "excel"];
+  const THEMES = ["light", "dark", "excel", "claude", "chatgpt"];
 
   function apply(kakaoMode, theme) {
     const b = document.body;

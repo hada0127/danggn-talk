@@ -44,6 +44,8 @@
           <label><input type="radio" name="kkt-theme" value="light"> 라이트</label>
           <label><input type="radio" name="kkt-theme" value="dark"> 다크</label>
           <label><input type="radio" name="kkt-theme" value="excel"> 엑셀</label>
+          <label><input type="radio" name="kkt-theme" value="claude"> 클로드</label>
+          <label><input type="radio" name="kkt-theme" value="chatgpt"> ChatGPT</label>
         </fieldset>
         <fieldset>
           <label>글씨 크기 <input type="range" id="kkt-font" min="12" max="22" step="1"></label>
