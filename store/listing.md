@@ -51,7 +51,7 @@ danggn-talk은 당근 채팅(chat.daangn.com)을 더 편하게 쓰기 위한 비
 
 ## 제출 단계(내가 몰고, 민감 단계는 사용자)
 1. 패키징: `scripts/package.sh` → `danggn-talk-v1.0.0.zip`
-2. https://chrome.google.com/webstore/devconsole (leehada0127 로그인) → 신규 항목 → zip 업로드
+2. https://chrome.google.com/webstore/devconsole (개발자 계정으로 로그인) → 신규 항목 → zip 업로드
 3. 위 리스팅 필드 입력 + 스크린샷 업로드 + 개인정보 항목
 4. (최초 등록자면) $5 등록비 결제 — **사용자 직접**
 5. 약관 동의 — **사용자 직접**
