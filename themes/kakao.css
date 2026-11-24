@@ -1,12 +1,22 @@
 /* 당근톡 카카오톡풍 스킨.
    스킨 규칙은 전부 body.kkt-kakao 로 게이트(스킨 끄면 당근 기본 유지).
    색은 전부 --kkt-* 변수로만 바꾸고, 규칙 본문은 변수를 참조하는 한 벌이다.
-   예외: 바로 아래 '팝업 헤더 숨김' 규칙만 body.kkt-kakao 가 아니라 html.kkt-popup 게이트다
-   (카톡 스킨 on/off 와 무관하게 팝업 창에선 항상 전역 헤더를 숨긴다). */
+   예외: 아래 두 규칙('팝업 헤더 숨김' + '팝업 목록 컬럼 숨김')만 body.kkt-kakao 가 아니라
+   html.kkt-popup 게이트다(카톡 스킨 on/off 와 무관하게 팝업 창에선 항상 전역 헤더와
+   목록 컬럼을 숨겨 선택한 방의 채팅만 보인다). */
 
 /* 팝업 헤더 숨김 — body.kkt-kakao 게이트 예외. main.body 바로 앞의 전역 헤더만 숨긴다.
    매치가 없으면 자동 no-op, SPA 리렌더에도 유지. (:has() → manifest minimum_chrome_version 105) */
 html.kkt-popup header:has(+ main.body) { display: none !important; }
+
+/* 팝업 목록 컬럼 숨김 — 팝업 창에선 선택한 방의 채팅 컬럼만 보인다.
+   목록 컬럼 = 방 링크를 품고, '뒤 형제'가 채팅방(.chat-normal-room)을 품은 div
+   (목록 컬럼이 채팅 컬럼보다 앞 형제). 해시 클래스 대신 :has() 구조로 잡는다.
+   방 미선택(.chat-normal-room 없음)·메시지 안의 /room/ 링크(채팅방은 조상이라 형제 아님)는
+   모두 매치 0 → graceful no-op. 채팅 컬럼은 당근 flex 가 채운다. */
+html.kkt-popup main.body div:has(a[href*="/room/"]):has(~ * .chat-normal-room) {
+  display: none !important;
+}
 
 /* 변수 기본값 = 라이트. 테마 클래스가 없을 때도, .kkt-theme-light 일 때도 이 규칙이 매치한다. */
 body.kkt-kakao {
@@ -39,13 +49,15 @@ body.kkt-kakao.kkt-theme-excel {
   --kkt-grid: #c3d3b5;
 }
 
-/* 채팅 컬럼 배경(MAIN.body 의 마지막 자식 = 채팅 영역) */
-body.kkt-kakao main.body > div:last-child {
+/* 채팅 배경(메시지 스크롤 컨테이너 = .for-containment 행을 직속 자식으로 가진 영역).
+   :not(.for-containment) 로 스크롤 컨테이너만 잡는다 — 중첩 .for-containment 를 가진
+   메시지 행까지 매치해 엑셀 격자가 그 행에서 어긋나는 것을 막는다. */
+body.kkt-kakao .chat-normal-room div:not(.for-containment):has(> .for-containment) {
   background: var(--kkt-bg) !important;
 }
 
 /* 엑셀 테마 격자 */
-body.kkt-kakao.kkt-theme-excel main.body > div:last-child {
+body.kkt-kakao.kkt-theme-excel .chat-normal-room div:not(.for-containment):has(> .for-containment) {
   background:
     linear-gradient(var(--kkt-grid) 1px, transparent 1px) 0 0 / 100% 28px,
     linear-gradient(90deg, var(--kkt-grid) 1px, transparent 1px) 0 0 / 56px 100%,

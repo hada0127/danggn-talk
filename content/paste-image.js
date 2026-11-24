@@ -1,4 +1,6 @@
-// 당근톡 이미지 붙여넣기: 클립보드 이미지를 당근 파일 input 에 첨부한다(전송은 사용자가).
+// 당근톡 이미지 붙여넣기: 클립보드 이미지를 당근 파일 input 에 넣는다.
+// ⚠ 당근은 파일 input 이 바뀌면 미리보기 없이 '즉시 전송'한다(당근 고유 동작). 이 확장은
+//    주입 경로만 담당하고 즉시전송 여부는 제어하지 않는다.
 // 팝업/일반 탭 공통. clipboardRead 권한 없이 native paste 이벤트만 사용.
 (() => {
   const K = (window.__kkt = window.__kkt || {});
@@ -56,7 +58,6 @@
     const dtf = new DataTransfer();
     files.forEach((f) => dtf.items.add(f));
     input.files = dtf.files;
-    input.dispatchEvent(new Event("input", { bubbles: true }));
     input.dispatchEvent(new Event("change", { bubbles: true }));
   }
 

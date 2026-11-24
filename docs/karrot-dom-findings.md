@@ -7,9 +7,13 @@
 - `document.body.className = "light-theme"` ← 당근 자체 테마 클래스가 body 에 있음. 네이티브 dark-theme 존재 여부 미확인(스타일시트에 dark-theme 규칙 수 확인하다 출력 잘림).
 - `#root > div > div.css-1mnz5cs`
   - `HEADER.css-19lthbi` → 전역 당근 헤더(로고 + 프로필). **팝업 창에서 숨길 대상.**
-  - `MAIN.body`
-    - `MAIN.body > div:first-child` (목록 컬럼) — 안에 `section`, 방 목록 `a[href*="/room/"]`
-    - `MAIN.body > div:last-child` (채팅 컬럼) — 선택한 방의 메시지+입력
+  - `MAIN.body` (flex, 자식을 가운데 정렬)
+    - `div` (wrapper, 해시 css-143d18r) — 안에 3영역:
+      - `div` (빈/아이콘 레일)
+      - `div` (목록 컬럼, 해시 css-so5s0) — 방 목록 `a[href*="/room/"]`, `.chat-normal-room` **없음**
+      - `section` (채팅 컬럼, 해시 css-am8mw7) — `.chat-normal-room` 포함, 선택한 방의 메시지+입력
+    - `div` (하단 PC알림 배너) — ★ 과거 'MAIN.body > div:last-child = 채팅 컬럼'은 **틀림**. 이 마지막 자식은 채팅이 아니라 하단 PC알림 배너다.
+  - 정정: **채팅 컬럼 = `.chat-normal-room` 을 품은 `section`**. **메시지 스크롤 컨테이너 = `.for-containment` 행을 직속 자식으로 가진 div**(표본 해시 css-13cllyv, 해시로 쓰지 말 것). 스크롤 컨테이너 안에는 **중첩 `.for-containment`(행 안에 또 `.for-containment`)가 있는 메시지 행도 존재** → 스크롤 컨테이너만 잡으려면 `:not(.for-containment)` 로 그 행을 배제.
   - `#popupRoot`, `#modalRoot` 별도 루트 존재.
 - `css-xxxxxx` 는 emotion(CSS-in-JS) 해시 → **배포마다 바뀜. 셀렉터로 쓰면 안 됨.** 시맨틱 클래스/구조로 타겟할 것.
 
