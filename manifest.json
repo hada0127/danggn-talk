@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "danggn-talk",
+  "name": "당근톡",
   "version": "1.0.0",
-  "description": "당근톡: 당근 모임 채팅을 회사에서 몰래 하려고 만든 도우미예요. 작은 팝업 창과 카톡·엑셀 스킨으로 티 안 나게 채팅해요. 당근마켓 공식 확장은 아니에요.",
+  "description": "당근 모임 채팅을 회사에서 몰래 하려고 만든 도우미예요. 작은 팝업 창과 카톡·엑셀 스킨으로 티 안 나게 채팅해요. 당근마켓 공식 확장은 아니에요.",
   "minimum_chrome_version": "105",
   "permissions": ["storage", "activeTab"],
   "action": {
-    "default_title": "danggn-talk",
+    "default_title": "당근톡",
     "default_icon": {
       "16": "icons/16.png",
       "48": "icons/48.png",
