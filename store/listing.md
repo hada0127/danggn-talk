@@ -4,7 +4,7 @@
 
 ## 기본 정보
 - **이름**: 당근톡 (manifest `name`, 2026-11-25 영문 danggn-talk 에서 변경. 레포·zip 파일명은 danggn-talk 유지)
-- **요약(Summary, 132자 이내)**: 당근톡 — 회사에서 당근 모임 채팅을 몰래! 작은 팝업 창을 클로드·ChatGPT·엑셀 화면처럼 바꿔 줘요. 카톡 스킨도 있어요.
+- **요약(Summary, 132자 이내)**: (manifest description 이 그대로 쓰임) 당근 모임 채팅을 회사에서 몰래 하려고 만든 도우미예요. 작은 팝업 창과 엑셀·클로드·지피티 스킨으로 티 안 나게 채팅해요. 당근마켓 공식 확장은 아니에요.
 - **카테고리**: 커뮤니케이션(Communication)
 - **언어**: 한국어
 
@@ -13,7 +13,7 @@
 ## 상세 설명(Description)
 ```
 당근톡은 당근 모임 채팅을 회사에서 몰래 하고 싶어서 만든 확장 프로그램이에요.
-당근 채팅(chat.daangn.com)을 눈에 덜 띄는 작은 창으로 띄우고, 메신저나 엑셀 화면처럼 보이게 바꿔 줘요.
+당근 채팅(chat.daangn.com)을 눈에 덜 띄는 작은 창으로 띄우고, 엑셀·클로드·지피티 화면처럼 보이게 바꿔 줘요.
 ※ 당근마켓에서 만든 공식 프로그램이 아니에요.
 
 [이런 걸 할 수 있어요]
@@ -62,12 +62,12 @@
 - **결정권자: 사용자.** 일단 "danggn-talk"으로 제출하되, 반려되면 이름/아이콘 조정.
 
 ## 등록 현황(2026-11-25)
-- 항목 ID `fdfmfejlmldbfkdhgohlilgpefalklep`(게시자 hada0127, 초안). 카테고리 커뮤니케이션 · 언어 한국어 · 무료 · 공개 · 전체 지역.
+- 항목 ID `fdfmfejlmldbfkdhgohlilgpefalklep`(게시자 hada0127). 2026-11-25 v1.0.2 "당근톡" 으로 검토 제출(검토 통과 시 자동 게시). 첫 제출(v1.0.0 영문 이름)은 리뷰 취소 후 재제출. 카테고리 커뮤니케이션 · 언어 한국어 · 무료 · 공개 · 전체 지역.
 - 홈페이지 https://github.com/hada0127/danggn-talk · 지원 …/issues · 개인정보처리방침 …/blob/main/PRIVACY.md
 - 업로드 이미지: `store/screenshots/upload/*.jpg`(알파 없는 JPEG — 웹스토어는 24비트 PNG/JPEG만 받음), 작은 프로모션 타일 `promo-440x280.jpg`(`tile.html` 캡처).
 
 ## 제출 단계(내가 몰고, 민감 단계는 사용자)
-1. 패키징: `scripts/package.sh` → `danggn-talk-v1.0.0.zip`
+1. 패키징: `scripts/package.sh` → `danggn-talk-v<version>.zip`
 2. https://chrome.google.com/webstore/devconsole (개발자 계정으로 로그인) → 신규 항목 → zip 업로드
 3. 위 리스팅 필드 입력 + 스크린샷 업로드 + 개인정보 항목
 4. (최초 등록자면) $5 등록비 결제 — **사용자 직접**
