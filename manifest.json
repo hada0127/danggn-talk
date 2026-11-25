@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "당근톡",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "당근 모임 채팅을 회사에서 몰래 하려고 만든 도우미예요. 작은 팝업 창과 엑셀·클로드·지피티 스킨으로 티 안 나게 채팅해요. 당근마켓 공식 확장은 아니에요.",
   "minimum_chrome_version": "105",
   "permissions": ["storage", "activeTab"],
