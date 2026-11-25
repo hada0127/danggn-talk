@@ -1,0 +1,21 @@
+<!doctype html>
+<!-- 스토어 스크린샷 프레임(1280×800): 왼쪽 문구 + 오른쪽 팝업 창(chat.html). -->
+<html><head><meta charset="utf-8"><style>
+ html,body{margin:0;width:1280px;height:800px;overflow:hidden;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+ body{display:flex;align-items:center;justify-content:center;gap:72px;background:linear-gradient(135deg,#fff4ec,#ffe3cf)}
+ .copy{width:480px}.copy h1{font-size:44px;line-height:1.25;margin:0 0 18px;color:#212124;letter-spacing:-0.02em}
+ .copy p{font-size:20px;line-height:1.6;color:#4d5159;margin:0}
+ .tag{display:inline-block;margin-bottom:16px;padding:6px 14px;border-radius:999px;background:#ff6f0f;color:#fff;font-weight:700;font-size:16px}
+ .win{width:440px;height:720px;border-radius:14px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.25);background:#fff;display:flex;flex-direction:column}
+ .bar{height:28px;background:#e8e8e8;display:flex;align-items:center;gap:7px;padding:0 12px}.bar i{width:12px;height:12px;border-radius:50%;display:block}
+ iframe{border:0;flex:1;width:100%}
+</style></head><body>
+<div class="copy"><span class="tag" id="tag"></span><h1 id="h"></h1><p id="p"></p></div>
+<div class="win"><div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><iframe id="f"></iframe></div>
+<script>
+ const q = new URLSearchParams(location.search);
+ document.getElementById("tag").textContent = q.get("tag") || "";
+ document.getElementById("h").innerHTML = (q.get("h") || "").replace(/\|/g, "<br>");
+ document.getElementById("p").textContent = q.get("p") || "";
+ document.getElementById("f").src = "chat.html?" + (q.get("chat") || "");
+</script></body></html>

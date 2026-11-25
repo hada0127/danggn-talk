@@ -34,10 +34,25 @@ html.kkt-popup main.body .chat-normal-room {
   margin: 0 !important;
 }
 
+/* 팝업 상단 빈 공간 제거 — 당근은 전역 헤더(fixed, 64px) 자리로 래퍼(header 와 main.body 의 부모)에
+   padding-top:64px, main.body 에 height:calc(100vh - 64px) 를 준다. 헤더를 숨긴 팝업에선 둘 다 푼다. */
+html.kkt-popup div:has(> header + main.body) { padding-top: 0 !important; }
+html.kkt-popup div:has(> header + main.body) > main.body { height: 100vh !important; }
+
 /* 방 제목 줄 왼쪽에 ‹ 뒤로 버튼 자리를 비운다(제목이 버튼 위로 겹치지 않게). popup-controls.js 가
-   ‹ 를 row 왼쪽 8px, 폭 32px 로 두므로 48px 패딩이면 8px 여백으로 제목이 버튼 오른쪽에서 시작한다.
-   헤더 줄 = .group-title 을 직속 자식으로 가진 div. 매치 없으면 자동 no-op. */
-html.kkt-popup div:has(> .group-title) { padding-left: 48px !important; }
+   ‹ 를 row 왼쪽 16px, 폭 24px 로 두므로 48px 패딩이면 8px 여백으로 제목이 버튼 오른쪽에서 시작한다.
+   헤더 줄 = 제목을 직속 자식으로 가진 div. 제목 = 모임방 .group-title / 1:1·거래·비즈 방 .chat-header-profile
+   (번들 실측: 방 종류별로 둘 중 하나). 매치 없으면 자동 no-op. */
+html.kkt-popup div:has(> :is(.group-title, .chat-header-profile)) { padding-left: 48px !important; }
+
+/* 팝업 프로필 레일 숨김 — 목록 컬럼(div) = [.sidebar(왼쪽 내 프사·비즈 계정 줄), nav(방 목록 312px)] (번들 실측).
+   레일을 숨기고, 목록 전용 보기에선 nav 의 312px 고정을 풀어 창 폭을 채운다. */
+html.kkt-popup main.body div:has(> nav ul[role="list"]) > .sidebar { display: none !important; }
+html.kkt-popup.kkt-list main.body nav:has(ul[role="list"]) {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+}
 
 /* 목록 전용 보기(‹ 버튼으로 html.kkt-list 토글): 위 B3 의 목록 숨김을 되돌려 목록 컬럼을 꽉 채우고
    채팅 컬럼을 숨긴다. .kkt-list 가 추가돼 B3·채팅폭 규칙보다 명시도가 높다. */
@@ -50,58 +65,128 @@ html.kkt-popup.kkt-list main.body div:has(a[href*="/room/"]):has(~ * .chat-norma
 }
 html.kkt-popup.kkt-list main.body section:has(.chat-normal-room) { display: none !important; }
 
+/* 다른 사람 프로필 숨기기(설정 토글 → theme.js 가 body.kkt-hide-avatars) — 카톡 스킨과 무관.
+   상대 메시지 = .for-containment.left, 프로필 = 그 안의 img.profile-image 를 감싼 div(번들 실측). */
+body.kkt-hide-avatars .for-containment.left div:has(> img.profile-image) { display: none !important; }
+
 /* 변수 기본값 = 라이트. 테마 클래스가 없을 때도, .kkt-theme-light 일 때도 이 규칙이 매치한다. */
+/* 라이트 = 카톡 PC 라이트 실측(2026-11-25 사용자 스크린샷): 하늘색 배경 #bacee0, 노랑 #fee500,
+   받은 말풍선 흰색, 제목 줄은 채팅 배경과 같은 색, 입력창은 흰 판.
+   --kkt-header-* / --kkt-input-* / --kkt-nick-fg 는 모든 테마 공통 기본값이고 다크만 덮는다. */
 body.kkt-kakao {
-  --kkt-bg: #b2c7da;
-  --kkt-mine-bg: #fef01b;
+  --kkt-bg: #bacee0;
+  --kkt-mine-bg: #fee500;
   --kkt-mine-fg: #1a1a1a;
   --kkt-other-bg: #ffffff;
   --kkt-other-fg: #1a1a1a;
-  --kkt-fg: #1a1a1a;
+  --kkt-fg: #4a4a4a;
+  --kkt-nick-fg: #333333;
+  --kkt-header-bg: var(--kkt-bg);
+  --kkt-header-fg: #1a1a1a;
+  --kkt-input-bg: #ffffff;
+  --kkt-input-fg: #1a1a1a;
+  --kkt-input-border: rgba(0,0,0,.08);
+  --kkt-input-ph: #9e9e9e;
+  --kkt-icon: #333333;
+  --kkt-icon-hover-bg: rgba(0,0,0,.06);
+  --kkt-send-bg: #f5f5f5;
+  --kkt-send-fg: #b4b4b4;
+  --kkt-send-border: #e6e6e6;
 }
 
-/* 다크 */
+/* 다크 = 카톡 PC 다크 실측: 거의 검정 배경, 받은 말풍선 진회색, 보낸 말풍선 노랑,
+   시간 회색·안읽음 숫자 노랑, 입력창 한 톤 밝은 회색 판. */
 body.kkt-kakao.kkt-theme-dark {
-  --kkt-bg: #1e1e24;
-  --kkt-mine-bg: #ffe14d;
+  --kkt-bg: #1c1c1c;
+  --kkt-mine-bg: #fee500;
   --kkt-mine-fg: #1a1a1a;
-  --kkt-other-bg: #3b3b44;
-  --kkt-other-fg: #f2f2f2;
-  --kkt-fg: #f2f2f2;
+  --kkt-other-bg: #383838;
+  --kkt-other-fg: #eeeeee;
+  --kkt-fg: #a8a8a8;
+  --kkt-nick-fg: #e0e0e0;
+  --kkt-header-fg: #f2f2f2;
+  --kkt-input-bg: #262626;
+  --kkt-input-fg: #eeeeee;
+  --kkt-input-border: #333333;
+  --kkt-input-ph: #7a7a7a;
+  --kkt-icon: #d8d8d8;
+  --kkt-icon-hover-bg: rgba(255,255,255,.08);
+  --kkt-send-bg: #303030;
+  --kkt-send-fg: #6e6e6e;
+  --kkt-send-border: #3a3a3a;
 }
+body.kkt-kakao.kkt-theme-dark .chat-normal-room .unread-text { color: #fee500 !important; }
 
-/* 엑셀(스프레드시트 느낌: 연한 배경 + 격자). --kkt-grid 는 엑셀에서만 쓴다. */
+/* 엑셀 = 실제 Excel 시트 모양(카톡 PC '엑셀 스타일'처럼 채팅을 시트로 위장): 흰 셀 + 회색 격자(#e1e1e1,
+   기본 셀 64×20px) + 회색 열 머리글(A,B,C…)·행 번호 거터(#f3f3f3/#d4d4d4/#444) + 초록(#217346) 제목 줄.
+   말풍선은 셀처럼 각진 흰 칸, 내 메시지는 '선택된 셀'(초록 2px 테두리). 아래 '엑셀 시트' 규칙 참고. */
 body.kkt-kakao.kkt-theme-excel {
-  --kkt-bg: #e9f0e4;
-  --kkt-mine-bg: #d9ead3;
-  --kkt-mine-fg: #16321a;
+  --kkt-bg: #ffffff;
+  --kkt-mine-bg: #ffffff;
+  --kkt-mine-fg: #000000;
   --kkt-other-bg: #ffffff;
-  --kkt-other-fg: #1a1a1a;
-  --kkt-fg: #16321a;
-  --kkt-grid: #c3d3b5;
+  --kkt-other-fg: #000000;
+  --kkt-fg: #666666;
+  --kkt-nick-fg: #333333;
+  --kkt-grid: #e1e1e1;
+  --kkt-header-bg: #217346;
+  --kkt-header-fg: #ffffff;
+  --kkt-input-bg: #ffffff;
+  --kkt-input-fg: #000000;
+  --kkt-input-border: #d4d4d4;
+  --kkt-icon: #217346;
+  --kkt-icon-hover-bg: #e9f3ee;
+  --kkt-send-bg: #f3f3f3;
+  --kkt-send-fg: #9e9e9e;
+  --kkt-send-border: #d4d4d4;
 }
 
-/* 클로드(claude.ai): 웜 페이퍼 배경 + 받은 말풍선 흰 카드 + 보낸 말풍선 웜 그레이.
-   claude.ai 실측(흰 배경 + 사용자 말풍선 5% 블랙 ≈ #f2f2f2)을 Claude 아이덴티티인
-   웜 톤으로 보정. 코럴 액센트는 과해져 쓰지 않고, 색만 따뜻하게 잡았다. */
+/* 클로드(claude.ai 흉내): 아이보리 배경 #faf9f5, 내 메시지 = 베이지 말풍선(#f0eee6),
+   받은 메시지 = 말풍선 없는 본문 글(AI 답변처럼), 둥근 카드 입력창 + 주황(#c6613f) ↑ 전송 버튼. 아래 'AI 챗 흉내' 규칙. */
 body.kkt-kakao.kkt-theme-claude {
-  --kkt-bg: #f5f4ee;
-  --kkt-mine-bg: #e9e6dd;
-  --kkt-mine-fg: #1f1e1c;
-  --kkt-other-bg: #ffffff;
-  --kkt-other-fg: #1f1e1c;
-  --kkt-fg: #73726c;
+  --kkt-bg: #faf9f5;
+  --kkt-mine-bg: #f0eee6;
+  --kkt-mine-fg: #141413;
+  --kkt-other-bg: transparent;
+  --kkt-other-fg: #141413;
+  --kkt-fg: #8a8880;
+  --kkt-nick-fg: #73726c;
+  --kkt-header-fg: #141413;
+  --kkt-input-bg: #ffffff;
+  --kkt-input-fg: #141413;
+  --kkt-input-border: #e5e3db;
+  --kkt-input-ph: #a3a29b;
+  --kkt-icon: #73726c;
+  --kkt-icon-hover-bg: #f0eee6;
+  --kkt-ai-radius: 20px;
+  --kkt-mine-radius: 12px;
+  --kkt-send-on: #c6613f;
+  --kkt-send-off: #e7b8a6;
+  --kkt-send-shape: 8px;
 }
 
-/* ChatGPT(chatgpt.com 실측): 거의 흰 배경 + 보낸 말풍선 검정/흰 글씨 + 받은(어시스턴트)은
-   당근 특성상 말풍선이 필요해 ChatGPT 서피스 그레이(#f4f4f4)로 은은하게 잡았다. */
+/* ChatGPT(chatgpt.com 흉내): 흰 배경, 내 메시지 = 연회색 말풍선(#f4f4f4), 받은 메시지 = 말풍선 없는 본문 글,
+   크게 둥근 입력창 + 검정 원형 ↑ 전송 버튼. */
 body.kkt-kakao.kkt-theme-chatgpt {
-  --kkt-bg: #fcfcfc;
-  --kkt-mine-bg: #000000;
-  --kkt-mine-fg: #ffffff;
-  --kkt-other-bg: #f4f4f4;
+  --kkt-bg: #ffffff;
+  --kkt-mine-bg: #f4f4f4;
+  --kkt-mine-fg: #0d0d0d;
+  --kkt-other-bg: transparent;
   --kkt-other-fg: #0d0d0d;
-  --kkt-fg: #6e6e80;
+  --kkt-fg: #8f8f8f;
+  --kkt-nick-fg: #5d5d5d;
+  --kkt-header-fg: #0d0d0d;
+  --kkt-input-bg: #ffffff;
+  --kkt-input-fg: #0d0d0d;
+  --kkt-input-border: #e3e3e3;
+  --kkt-input-ph: #8f8f8f;
+  --kkt-icon: #5d5d5d;
+  --kkt-icon-hover-bg: #f4f4f4;
+  --kkt-ai-radius: 28px;
+  --kkt-mine-radius: 18px;
+  --kkt-send-on: #000000;
+  --kkt-send-off: #d7d7d7;
+  --kkt-send-shape: 50%;
 }
 
 /* 채팅 배경(메시지 스크롤 컨테이너 = .for-containment 행을 직속 자식으로 가진 영역).
@@ -111,18 +196,83 @@ body.kkt-kakao .chat-normal-room div:not(.for-containment):has(> .for-containmen
   background: var(--kkt-bg) !important;
 }
 
-/* 엑셀 테마 격자 */
+/* 엑셀 시트: 열 머리글·행 번호(SVG) + 셀 격자. 스크롤 요소의 배경은 기본(scroll)이라 내용이 스크롤돼도
+   머리글·거터는 제자리에 남는다. 격자는 머리글(20px)·거터(40px) 끝에서 시작. 내용은 거터 오른쪽·머리글 아래로 민다. */
 body.kkt-kakao.kkt-theme-excel .chat-normal-room div:not(.for-containment):has(> .for-containment) {
   background:
-    linear-gradient(var(--kkt-grid) 1px, transparent 1px) 0 0 / 100% 28px,
-    linear-gradient(90deg, var(--kkt-grid) 1px, transparent 1px) 0 0 / 56px 100%,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1704' height='20'%3E%3Crect width='100%' height='100%' fill='%23f3f3f3'/%3E%3Crect y='19' width='100%' height='1' fill='%23d4d4d4'/%3E%3Crect x='39' width='1' height='20' fill='%23d4d4d4'/%3E%3Crect x='103' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='72' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EA%3C/text%3E%3Crect x='167' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='136' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EB%3C/text%3E%3Crect x='231' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='200' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EC%3C/text%3E%3Crect x='295' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='264' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3ED%3C/text%3E%3Crect x='359' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='328' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EE%3C/text%3E%3Crect x='423' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='392' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EF%3C/text%3E%3Crect x='487' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='456' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EG%3C/text%3E%3Crect x='551' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='520' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EH%3C/text%3E%3Crect x='615' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='584' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EI%3C/text%3E%3Crect x='679' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='648' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EJ%3C/text%3E%3Crect x='743' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='712' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EK%3C/text%3E%3Crect x='807' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='776' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EL%3C/text%3E%3Crect x='871' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='840' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EM%3C/text%3E%3Crect x='935' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='904' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EN%3C/text%3E%3Crect x='999' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='968' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EO%3C/text%3E%3Crect x='1063' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1032' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EP%3C/text%3E%3Crect x='1127' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1096' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EQ%3C/text%3E%3Crect x='1191' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1160' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3ER%3C/text%3E%3Crect x='1255' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1224' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3ES%3C/text%3E%3Crect x='1319' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1288' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3ET%3C/text%3E%3Crect x='1383' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1352' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EU%3C/text%3E%3Crect x='1447' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1416' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EV%3C/text%3E%3Crect x='1511' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1480' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EW%3C/text%3E%3Crect x='1575' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1544' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EX%3C/text%3E%3Crect x='1639' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1608' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EY%3C/text%3E%3Crect x='1703' width='1' height='20' fill='%23d4d4d4'/%3E%3Ctext x='1672' y='14' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E") 0 0 / auto no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='2000'%3E%3Crect width='100%' height='100%' fill='%23f3f3f3'/%3E%3Crect x='39' width='1' height='100%' fill='%23d4d4d4'/%3E%3Crect y='39' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='34' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E1%3C/text%3E%3Crect y='59' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='54' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E2%3C/text%3E%3Crect y='79' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='74' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E3%3C/text%3E%3Crect y='99' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='94' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E4%3C/text%3E%3Crect y='119' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='114' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E5%3C/text%3E%3Crect y='139' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='134' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E6%3C/text%3E%3Crect y='159' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='154' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E7%3C/text%3E%3Crect y='179' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='174' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E8%3C/text%3E%3Crect y='199' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='194' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E9%3C/text%3E%3Crect y='219' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='214' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E10%3C/text%3E%3Crect y='239' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='234' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E11%3C/text%3E%3Crect y='259' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='254' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E12%3C/text%3E%3Crect y='279' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='274' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E13%3C/text%3E%3Crect y='299' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='294' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E14%3C/text%3E%3Crect y='319' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='314' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E15%3C/text%3E%3Crect y='339' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='334' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E16%3C/text%3E%3Crect y='359' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='354' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E17%3C/text%3E%3Crect y='379' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='374' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E18%3C/text%3E%3Crect y='399' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='394' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E19%3C/text%3E%3Crect y='419' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='414' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E20%3C/text%3E%3Crect y='439' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='434' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E21%3C/text%3E%3Crect y='459' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='454' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E22%3C/text%3E%3Crect y='479' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='474' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E23%3C/text%3E%3Crect y='499' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='494' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E24%3C/text%3E%3Crect y='519' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='514' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E25%3C/text%3E%3Crect y='539' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='534' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E26%3C/text%3E%3Crect y='559' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='554' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E27%3C/text%3E%3Crect y='579' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='574' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E28%3C/text%3E%3Crect y='599' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='594' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E29%3C/text%3E%3Crect y='619' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='614' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E30%3C/text%3E%3Crect y='639' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='634' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E31%3C/text%3E%3Crect y='659' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='654' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E32%3C/text%3E%3Crect y='679' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='674' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E33%3C/text%3E%3Crect y='699' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='694' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E34%3C/text%3E%3Crect y='719' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='714' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E35%3C/text%3E%3Crect y='739' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='734' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E36%3C/text%3E%3Crect y='759' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='754' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E37%3C/text%3E%3Crect y='779' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='774' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E38%3C/text%3E%3Crect y='799' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='794' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E39%3C/text%3E%3Crect y='819' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='814' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E40%3C/text%3E%3Crect y='839' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='834' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E41%3C/text%3E%3Crect y='859' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='854' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E42%3C/text%3E%3Crect y='879' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='874' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E43%3C/text%3E%3Crect y='899' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='894' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E44%3C/text%3E%3Crect y='919' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='914' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E45%3C/text%3E%3Crect y='939' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='934' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E46%3C/text%3E%3Crect y='959' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='954' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E47%3C/text%3E%3Crect y='979' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='974' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E48%3C/text%3E%3Crect y='999' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='994' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E49%3C/text%3E%3Crect y='1019' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1014' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E50%3C/text%3E%3Crect y='1039' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1034' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E51%3C/text%3E%3Crect y='1059' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1054' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E52%3C/text%3E%3Crect y='1079' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1074' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E53%3C/text%3E%3Crect y='1099' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1094' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E54%3C/text%3E%3Crect y='1119' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1114' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E55%3C/text%3E%3Crect y='1139' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1134' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E56%3C/text%3E%3Crect y='1159' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1154' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E57%3C/text%3E%3Crect y='1179' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1174' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E58%3C/text%3E%3Crect y='1199' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1194' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E59%3C/text%3E%3Crect y='1219' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1214' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E60%3C/text%3E%3Crect y='1239' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1234' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E61%3C/text%3E%3Crect y='1259' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1254' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E62%3C/text%3E%3Crect y='1279' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1274' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E63%3C/text%3E%3Crect y='1299' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1294' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E64%3C/text%3E%3Crect y='1319' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1314' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E65%3C/text%3E%3Crect y='1339' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1334' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E66%3C/text%3E%3Crect y='1359' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1354' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E67%3C/text%3E%3Crect y='1379' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1374' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E68%3C/text%3E%3Crect y='1399' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1394' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E69%3C/text%3E%3Crect y='1419' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1414' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E70%3C/text%3E%3Crect y='1439' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1434' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E71%3C/text%3E%3Crect y='1459' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1454' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E72%3C/text%3E%3Crect y='1479' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1474' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E73%3C/text%3E%3Crect y='1499' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1494' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E74%3C/text%3E%3Crect y='1519' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1514' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E75%3C/text%3E%3Crect y='1539' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1534' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E76%3C/text%3E%3Crect y='1559' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1554' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E77%3C/text%3E%3Crect y='1579' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1574' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E78%3C/text%3E%3Crect y='1599' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1594' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E79%3C/text%3E%3Crect y='1619' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1614' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E80%3C/text%3E%3Crect y='1639' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1634' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E81%3C/text%3E%3Crect y='1659' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1654' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E82%3C/text%3E%3Crect y='1679' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1674' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E83%3C/text%3E%3Crect y='1699' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1694' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E84%3C/text%3E%3Crect y='1719' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1714' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E85%3C/text%3E%3Crect y='1739' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1734' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E86%3C/text%3E%3Crect y='1759' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1754' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E87%3C/text%3E%3Crect y='1779' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1774' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E88%3C/text%3E%3Crect y='1799' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1794' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E89%3C/text%3E%3Crect y='1819' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1814' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E90%3C/text%3E%3Crect y='1839' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1834' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E91%3C/text%3E%3Crect y='1859' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1854' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E92%3C/text%3E%3Crect y='1879' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1874' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E93%3C/text%3E%3Crect y='1899' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1894' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E94%3C/text%3E%3Crect y='1919' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1914' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E95%3C/text%3E%3Crect y='1939' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1934' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E96%3C/text%3E%3Crect y='1959' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1954' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E97%3C/text%3E%3Crect y='1979' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1974' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E98%3C/text%3E%3Crect y='1999' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='1994' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E99%3C/text%3E%3Crect y='2019' width='40' height='1' fill='%23d4d4d4'/%3E%3Ctext x='20' y='2014' font-family='Segoe UI,Arial,sans-serif' font-size='11' fill='%23444' text-anchor='middle'%3E100%3C/text%3E%3C/svg%3E") 0 0 / auto no-repeat,
+    linear-gradient(var(--kkt-grid) 1px, transparent 1px) 40px 20px / 100% 20px,
+    linear-gradient(90deg, var(--kkt-grid) 1px, transparent 1px) 40px 20px / 64px 100%,
     var(--kkt-bg) !important;
+  padding-left: 44px !important;
+  padding-top: 20px !important;
+}
+body.kkt-kakao.kkt-theme-excel p.message-box {
+  border-radius: 0 !important;
+  border: 1px solid #d4d4d4 !important;
+  padding: 2px 6px !important;
+}
+body.kkt-kakao.kkt-theme-excel .for-containment:not(.left) p.message-box {
+  border: 2px solid #217346 !important; /* 선택된 셀 */
 }
 
-/* 말풍선 공통 */
+/* 말풍선 공통(카톡: 모서리 12px) */
 body.kkt-kakao p.message-box {
-  border-radius: 14px !important;
-  padding: 8px 11px !important;
+  border-radius: 12px !important;
+  padding: 8px 12px !important;
+}
+
+/* 제목 줄(카톡: 채팅 배경과 이어지는 같은 색, 구분선 없음). 제목 줄 = 제목(.group-title/.chat-header-profile)의 부모(64px 줄).
+   ⋮ 도 같은 글자색 → popup-controls.js 가 그 색을 ‹·⚙ 에 복사한다. */
+body.kkt-kakao section:has(.chat-normal-room) div:has(> :is(.group-title, .chat-header-profile)) {
+  background: var(--kkt-header-bg) !important;
+  color: var(--kkt-header-fg) !important;
+  border-bottom-color: transparent !important;
+}
+body.kkt-kakao section:has(.chat-normal-room) div:has(> :is(.group-title, .chat-header-profile)) .more-button-wrapper {
+  color: var(--kkt-header-fg) !important;
+}
+
+/* 입력창(카톡: 바깥 여백·테두리 없는 하단 판). 당근 form = margin 16px + 1px 테두리 + radius 8px. */
+body.kkt-kakao section:has(.chat-normal-room) form:has(.chatform-option-area) {
+  margin: 0 !important;
+  border: 0 !important;
+  border-top: 1px solid var(--kkt-input-border) !important;
+  border-radius: 0 !important;
+  background: var(--kkt-input-bg) !important;
+  color: var(--kkt-input-fg) !important;
+}
+body.kkt-kakao section:has(.chat-normal-room) form:has(.chatform-option-area) textarea {
+  background: transparent !important;
+  color: var(--kkt-input-fg) !important;
+  font-size: 15px !important;
+}
+body.kkt-kakao section:has(.chat-normal-room) form:has(.chatform-option-area) textarea::placeholder {
+  color: var(--kkt-input-ph) !important;
+}
+/* 아이콘(사진·문구·이모티콘 등): 당근 회색 fill → 카톡처럼 진한 단색, hover 는 은은한 판. */
+body.kkt-kakao section:has(.chat-normal-room) form .option-wrapper svg {
+  fill: var(--kkt-icon) !important;
+  color: var(--kkt-icon) !important;
+}
+body.kkt-kakao section:has(.chat-normal-room) form .option-wrapper:is(:hover, .selected) {
+  background-color: var(--kkt-icon-hover-bg) !important;
+}
+/* 글자수(0/1000)는 카톡에 없어 숨긴다. */
+body.kkt-kakao section:has(.chat-normal-room) form .text-length { display: none !important; }
+/* 전송 버튼(.chatform-option-area 직속 button): 당근 주황 → 카톡 회색 판(빈 입력) / 노랑(입력 있음). */
+body.kkt-kakao section:has(.chat-normal-room) .chatform-option-area > button {
+  border: 1px solid var(--kkt-send-border) !important;
+  border-radius: 6px !important;
+  height: 34px !important;
+  background: #fee500 !important;
+  color: #1a1a1a !important;
+  font-weight: 400 !important;
+}
+body.kkt-kakao section:has(.chat-normal-room) .chatform-option-area > button.disable {
+  background: var(--kkt-send-bg) !important;
+  color: var(--kkt-send-fg) !important;
 }
 
 /* 나(.for-containment:not(.left) — bare 연속 메시지 포함) / 상대(.for-containment.left) */
@@ -135,8 +285,60 @@ body.kkt-kakao .for-containment.left p.message-box {
   color: var(--kkt-other-fg) !important;
 }
 
-/* 말풍선 밖 텍스트(닉네임·날짜 구분선) 색 — 다크/엑셀 배경에서 묻히지 않게 */
-body.kkt-kakao .message-wrapper > .nickname,
+/* 말풍선 밖 텍스트(시간 .message-date·닉네임) 색 — 다크/엑셀 배경에서 묻히지 않게 */
 body.kkt-kakao .message-date {
   color: var(--kkt-fg) !important;
+}
+body.kkt-kakao .message-wrapper > .nickname {
+  color: var(--kkt-nick-fg) !important;
+}
+
+/* 채팅 컬럼 바탕도 스킨 배경으로 — 입력창 바깥 여백(AI 챗 카드 입력창)에 당근 흰 바탕이 띠처럼 보이지 않게. */
+body.kkt-kakao section:has(.chat-normal-room) { background-color: var(--kkt-bg) !important; }
+
+/* ===== AI 챗 흉내(클로드·지피티) — 회사에서 AI 챗 화면처럼 보이게 =====
+   받은 메시지는 프로필·말풍선 없이 본문 글처럼, 입력창은 테두리+그림자 둥근 카드, 전송은 ↑ 아이콘 버튼. */
+body.kkt-kakao:is(.kkt-theme-claude, .kkt-theme-chatgpt) .for-containment.left div:has(> img.profile-image) {
+  display: none !important;
+}
+body.kkt-kakao:is(.kkt-theme-claude, .kkt-theme-chatgpt) .for-containment.left p.message-box {
+  padding: 2px 0 !important;
+  border-radius: 0 !important;
+  line-height: 1.65 !important;
+}
+body.kkt-kakao:is(.kkt-theme-claude, .kkt-theme-chatgpt) .for-containment:not(.left) p.message-box {
+  border-radius: var(--kkt-mine-radius) !important;
+  padding: 10px 16px !important;
+}
+body.kkt-kakao:is(.kkt-theme-claude, .kkt-theme-chatgpt) .message-wrapper > .nickname {
+  font-size: 12px !important;
+}
+body.kkt-kakao:is(.kkt-theme-claude, .kkt-theme-chatgpt) .chat-normal-room .unread-text {
+  color: var(--kkt-fg) !important;
+}
+body.kkt-kakao:is(.kkt-theme-claude, .kkt-theme-chatgpt) section:has(.chat-normal-room) form:has(.chatform-option-area) {
+  margin: 8px 16px 16px !important;
+  border: 1px solid var(--kkt-input-border) !important;
+  border-radius: var(--kkt-ai-radius) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06) !important;
+}
+body.kkt-kakao:is(.kkt-theme-claude, .kkt-theme-chatgpt) section:has(.chat-normal-room) .chatform-option-area > button {
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: var(--kkt-send-shape) !important;
+  background: var(--kkt-send-on) !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  position: relative !important;
+}
+body.kkt-kakao:is(.kkt-theme-claude, .kkt-theme-chatgpt) section:has(.chat-normal-room) .chatform-option-area > button::after {
+  content: "↑";
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: #fff;
+}
+body.kkt-kakao:is(.kkt-theme-claude, .kkt-theme-chatgpt) section:has(.chat-normal-room) .chatform-option-area > button.disable {
+  background: var(--kkt-send-off) !important;
 }

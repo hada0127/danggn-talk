@@ -20,6 +20,11 @@
 ## 방 제목 줄(제목 바) — 제목 줄 컨트롤 설계 근거 (2026-11-25)
 - 채팅 헤더 줄 = `div:has(> .group-title)`. 안에 `.group-title`(방 이름, 왼쪽)과 우측 컨테이너의 `.more-button-wrapper`(⋮ 더보기 메뉴)가 있다.
 - 팝업(html.kkt-popup)에선 조상에 padding-top:64px 가 있어(숨긴 전역 헤더 자리) 제목 줄이 상단 ~64px, 높이 ~64px 로 앉는다.
+  - 2026-11-25 번들(main.c5beee45.js) 확인: 그 조상 = header 와 main.body 의 부모 div(padding-top:64px), main.body 는 height:calc(100vh - 64px). kakao.css 가 팝업에서 둘 다 해제한다.
+- 방 제목은 방 종류별로 다르다(번들 zi 컴포넌트): 모임방 = `.group-title`, 1:1·거래(FLEA)·비즈 = `.chat-header-profile`(img.chat-header-image + .main-title). 둘 다 같은 헤더 줄 div 의 직속 자식이고 ⋮ 는 그 줄 안에 있다.
+- 팝업 래퍼(main.body 직속) 자식 = [div(Ga 팝업·Va 모달 — 숨기면 안 됨), 목록 컬럼 div, 채팅 section, 토스트]. 목록 컬럼 div = [`.sidebar`(왼쪽 내 프사·비즈 계정 레일), `nav`(width/min-width 312px, 안에 `ul[role=list]` 방 목록)].
+- 상대 메시지 프로필 = `.for-containment.left` 안 `div > img.profile-image`. 입력창 = `form:has(.chatform-option-area)`(margin 16px·테두리·radius 8px·높이 125px), 전송 = `.chatform-option-area > button`(빈 입력 시 `.disable`), 글자수 `.text-length`, 아이콘 `.option-wrapper svg`(fill). 말풍선 기본 font-size 14px.
+- ⋮ 버튼 = `.more-button-wrapper` 24×24(radius 4px), 아이콘 4×16 svg `fill=currentColor`. ‹·⚙ 는 이 크기·색(computed color 복사)에 맞춘다.
 - 제목 줄 컨트롤은 `.group-title` rect 로 세로 중앙을 계산해 ‹(왼쪽)·⚙(⋮ 왼쪽)을 fixed 로 올린다. `.group-title` 없으면 숨김(no-op). 제목 줄 왼쪽은 kakao.css 가 padding-left:48px 로 ‹ 자리를 비운다.
 
 ## 팝업 2컬럼(목록/채팅) — 목록 전용 보기 설계 근거 (2026-11-25)

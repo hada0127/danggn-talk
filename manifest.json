@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "danggn-talk",
   "version": "1.0.0",
-  "description": "당근 채팅을 메뉴바 없는 작은 팝업 창과 카카오톡풍 스킨으로 쓰는 비공식 도우미입니다. 당근마켓 공식 확장이 아닙니다.",
+  "description": "당근톡: 당근 모임 채팅을 회사에서 몰래 하려고 만든 도우미예요. 작은 팝업 창과 카톡·엑셀 스킨으로 티 안 나게 채팅해요. 당근마켓 공식 확장은 아니에요.",
   "minimum_chrome_version": "105",
   "permissions": ["storage", "activeTab"],
   "action": {
