@@ -61,6 +61,11 @@ danggn-talk(당근톡)은 당근 모임 채팅을 회사에서 몰래 하고 싶
 - 반려 시 대안 이름 후보(사용자 결정): "채팅 팝업 for 당근", "캐럿 팝업톡" 등 또는 당근 비연상 중립 이름.
 - **결정권자: 사용자.** 일단 "danggn-talk"으로 제출하되, 반려되면 이름/아이콘 조정.
 
+## 등록 현황(2026-11-25)
+- 항목 ID `fdfmfejlmldbfkdhgohlilgpefalklep`(게시자 hada0127, 초안). 카테고리 커뮤니케이션 · 언어 한국어 · 무료 · 공개 · 전체 지역.
+- 홈페이지 https://github.com/hada0127/danggn-talk · 지원 …/issues · 개인정보처리방침 …/blob/main/PRIVACY.md
+- 업로드 이미지: `store/screenshots/upload/*.jpg`(알파 없는 JPEG — 웹스토어는 24비트 PNG/JPEG만 받음), 작은 프로모션 타일 `promo-440x280.jpg`(`tile.html` 캡처).
+
 ## 제출 단계(내가 몰고, 민감 단계는 사용자)
 1. 패키징: `scripts/package.sh` → `danggn-talk-v1.0.0.zip`
 2. https://chrome.google.com/webstore/devconsole (개발자 계정으로 로그인) → 신규 항목 → zip 업로드
